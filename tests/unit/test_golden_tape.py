@@ -20,11 +20,14 @@ from loan_tape.schema import Loan
 GOLDEN_TAPE_PATH = Path(__file__).resolve().parent.parent / "fixtures" / "golden_tape.parquet"
 
 #: Pinned hash. Bump only when the generator's behavior changes intentionally.
-GOLDEN_TAPE_SHA256 = "a63c7865ae5db20ca06e708acf074e3eb58b99675e283a9ea886bb2f5aafb8f6"
+GOLDEN_TAPE_SHA256 = "130b86778a98d91b4701e7c86987bc29485c731918f2beb3a36cc14aeb82c4ce"
 
 #: Generation parameters that produced the pinned hash.
+#: The golden fixture is the CLEAN baseline (no easter eggs) — validation tests
+#: that need anomalies generate their own injected tapes.
 GOLDEN_TAPE_N = 500
 GOLDEN_TAPE_SEED = 1
+GOLDEN_TAPE_INJECT_EASTER_EGGS = False
 
 
 def test_golden_tape_file_exists() -> None:
@@ -48,7 +51,11 @@ def test_golden_tape_sha256_pinned() -> None:
 
 def test_golden_tape_regenerates_identically() -> None:
     """Calling the generator with the same (n, seed) reproduces the stored frame."""
-    fresh = generate_tape(n=GOLDEN_TAPE_N, seed=GOLDEN_TAPE_SEED)
+    fresh = generate_tape(
+        n=GOLDEN_TAPE_N,
+        seed=GOLDEN_TAPE_SEED,
+        inject_easter_eggs=GOLDEN_TAPE_INJECT_EASTER_EGGS,
+    )
     stored = pl.read_parquet(GOLDEN_TAPE_PATH)
     assert fresh.shape == stored.shape
     # Polars frame_equal handles column ordering and nulls correctly.
