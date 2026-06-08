@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.hypothesis/
+
+# Linting
+.ruff_cache/
+.mypy_cache/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# DuckDB runtime state
+*.duckdb
+*.duckdb.wal
+governance_state.duckdb
+governance_state.duckdb.wal
+
+# Generated synthetic tapes (large) — keep only the v1 reference
+data/samples/*.parquet
+!data/samples/synthetic_tape_v1.parquet
+
+# Eval results — regenerated on each run
+evals/results/*.md
+!evals/results/.gitkeep
+
+# Sample reports
+docs/sample-reports/*.html
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+.secrets.baseline
+
+# uv
+.uv-cache/

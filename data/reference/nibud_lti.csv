@@ -1,0 +1,13 @@
+year,income_eur,lti_factor_pct,interest_rate_assumed_pct,notes
+2024,30000,400,4.0,Lower-income LTI factor.
+2024,40000,425,4.0,
+2024,60000,500,4.0,
+2024,80000,500,4.0,
+2024,100000,475,4.0,Sliding cap at upper bands.
+2024,150000,450,4.0,
+2025,30000,400,3.5,Updated for 2025 rate assumption.
+2025,40000,425,3.5,
+2025,60000,500,3.5,
+2025,80000,525,3.5,Two-income households slight uplift.
+2025,100000,500,3.5,
+2025,150000,475,3.5,

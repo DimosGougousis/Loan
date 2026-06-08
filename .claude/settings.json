@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": "Hooks for the Dutch Loan-Tape Analyzer harness. Each hook implements one rule from .claude/CLAUDE.md or docs/governance/fail-gracefully.md.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "_comment": "After every Edit/Write to a Python file, run ruff format and ruff check --fix. Keeps the diff small and the code consistent.",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/post_edit_ruff.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "_comment": "On Claude stop, run pytest -x --ff on changed test files. Enforces the Iron Law: no claim of done without a green test.",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/stop_pytest.py"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [],
+    "Notification": []
+  },
+  "_pre_commit_note": "PreCommit guards live under .claude/hooks/ and are wired via git pre-commit (see scripts/install-hooks.sh): precommit_tdd_guard.py, precommit_ai_trailer.py, precommit_mass_rewrite_guard.py, precommit_secrets.py.",
+  "permissions": {
+    "allow": [
+      "Bash(uv run *)",
+      "Bash(uv sync*)",
+      "Bash(pytest*)",
+      "Bash(ruff*)",
+      "Bash(streamlit*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  }
+}

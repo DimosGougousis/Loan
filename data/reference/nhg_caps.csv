@@ -1,0 +1,17 @@
+year,nhg_cap_eur,nhg_cap_energy_neutral_eur,nhg_premium_pct,notes
+2010,265000,265000,0.0055,Pre-2013 cohort. Premium 0.55%.
+2011,350000,350000,0.0055,Crisis-era cap increase.
+2012,320000,320000,0.0070,
+2013,290000,290000,0.0085,Tax-deduction regime change: HRA only on annuity/linear from this year.
+2014,265000,265000,0.0100,
+2015,245000,245000,0.0100,
+2016,231132,231132,0.0100,Indexed to NVM house-price.
+2017,247450,247450,0.0100,
+2018,265000,280900,0.0100,Energy-neutral cap introduced (extra 6% headroom).
+2019,290000,307400,0.0090,
+2020,310000,328600,0.0070,
+2021,325000,344500,0.0070,
+2022,355000,376300,0.0060,
+2023,405000,429300,0.0060,Sharp index increase post-pandemic.
+2024,435000,461100,0.0060,
+2025,450000,477000,0.0040,Premium reduced to 0.4%.
