@@ -1,43 +1,47 @@
 # Eval Rubric — Validation Report
 
-> **Status:** Placeholder. Populated in Day 1 PM #3.
+> Paired test: ``tests/integration/test_validation_report.py``.
+>
+> Owner line: 1st line (build), 2nd line (approve threshold changes).
 
 ## Purpose
 
-The validation engine in `src/loan_tape/validate/rules.py` must catch ≥ 95% of the issues seeded into `evals/datasets/validation_easter_eggs.parquet`. This includes all 9 NL-specific cross-field rules from §5.5 of the plan.
+The validation engine in `src/loan_tape/validate/rules.py` and the AnaCredit
+mapper in `src/loan_tape/validate/anacredit.py` together produce the loan-tape
+validation report (BCBS 239 + AnaCredit conformance). This rubric pins their
+behavior under regression.
 
 ## Pass criteria
 
-- ≥ 95% of seeded issues surface with the correct severity.
-- 0 false-positive CRITICAL findings on a clean tape (`tests/fixtures/golden_tape.parquet`).
-- Every CRITICAL finding includes a regulation citation.
-- AnaCredit conformance ≥ 98% on the clean tape.
+| # | Criterion | Test |
+|---|---|---|
+| 1 | **≥ 95% recall** on each seeded easter-egg cohort that maps to a rule | `test_eval_easter_egg_recall_meets_95pct` |
+| 2 | **0 false-positive CRITICAL** findings on the clean ``golden_tape.parquet`` | `test_eval_no_false_positive_criticals_on_clean_tape` |
+| 3 | **AnaCredit conformance ≥ 98%** on the clean tape | `test_eval_anacredit_conformance_on_clean_tape` |
+| 4 | Every CRITICAL finding carries a regulation citation | `test_eval_every_critical_cites_a_regulation` |
 
-## Categories of seeded issues
+## Easter eggs (cohorts and their target rules)
 
-1. NHG cap breach (`nhg_flag=True` AND `original_principal > nhg_cap_at_origination`).
-2. HRA non-conformance (`tax_deduction_eligible=True` AND `repayment_type IN {AFLOSSINGSVRIJ, BANKSPAAR, ...}`).
-3. LTV computation drift (`current_ltv` ≠ `current_balance / property_value_current`).
-4. Stale taxatie (Stage 1 loan with `taxatie_date` > 36 months old).
-5. Stage 3 without dpd≥90 and without UTP flag.
-6. PD monotonicity (`pd_lifetime < pd_12m`).
-7. Negative amortization (`current_balance > original_principal × 1.001`).
-8. LTI cap breach (`original_lti > nibud_lti_cap(origination_year, gross_income)`).
-9. Interest-only ratio > 50% on HRA-eligible loan.
+| Easter egg | Target rule | Notes |
+|---|---|---|
+| `NHG_CAP_BREACH_BATCH` | `nhg_cap` (CRITICAL) | Every row should surface |
+| `HIGH_INTEREST_ONLY_CLUSTER` | `interest_only_cap` (HIGH) | HRA-eligible only |
+| `STALE_TAXATIE_CLUSTER` | `taxatie_freshness` (MEDIUM) | Only Stage 1 loans tested |
+| `HIGH_AFLOSSINGSVRIJ_COHORT` | (anomaly detector — Day 2 PM #1) | Not validated by rules |
 
 ## Failure handling
 
-- If recall < 95% → eval FAILED → blocks merge.
-- If any false-positive CRITICAL on the clean tape → eval FAILED.
+- If any rubric criterion fails → eval FAILED → blocks merge (regulated path
+  per `docs/governance/change-management.md`).
+- Eval flake (≥ 4/5 reruns pass) → marked FLAKY, requires 2nd-line override
+  with reasoning logged in `docs/governance/decisions.md`.
 
-## Paired test
+## Source citations
 
-`tests/integration/test_validation_report.py` (created in Day 1 PM #3).
-
-## Source
-
-- IFRS 9 (stage 3 backstop)
-- NHG / WEW (annual cap)
+- IFRS 9 par. 5.5.11 (Stage 3 backstop)
+- EBA GL/2017/06 (SICR thresholds — exercised indirectly via `stage_3_backstop`)
+- NHG / WEW (annual cap publication)
 - *Tijdelijke regeling hypothecair krediet* (LTI cap)
-- Nibud norms (LTI table)
-- BCBS 239 (data quality dimensions)
+- *Hypotheekrenteaftrek* regime, post-2013 (Belastingdienst)
+- BCBS 239 (data-quality dimensions: accuracy / completeness / timeliness / integrity)
+- ECB Reg 2016/867 Annex II (AnaCredit)
