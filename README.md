@@ -42,6 +42,10 @@ uv run pytest                  # unit + integration tests
 uv run python evals/runner.py  # eval rubrics
 ```
 
+## Scope boundary — where this platform sits
+
+This is a **post-origination credit-risk portfolio analytics platform**. It is *not* a mortgage origination system. The full Dutch mortgage lifecycle, the upstream platform that produces our input tape, the downstream consumers of our output, and the explicit reasoning for picking this slice over the customer-journey alternative are documented in [`docs/scope-boundary.md`](docs/scope-boundary.md). Read that doc before assessing scope.
+
 ## Why this exists
 
 This is a portfolio piece for the **AI-Assisted Builder (Claude / AI Agents) — Credit Risk Portfolio Analysis Platform** role at a Dutch bank. The interesting artifact is not the Streamlit app — it is the **harness around Claude** that kept the build correct and defensible to a 2nd-line reviewer:

@@ -1,6 +1,8 @@
 # Architecture
 
 > One-page system view. Filled in with a real graphviz diagram during Day 3.
+>
+> **Scope.** This document covers the *internals* of the platform — components, data flow, trust boundaries. For *where the platform sits in the broader Dutch mortgage ecosystem* (upstream origination, downstream consumers, and the rationale for our slice), see [`scope-boundary.md`](scope-boundary.md).
 
 ## Component diagram (graphviz DOT)
 
